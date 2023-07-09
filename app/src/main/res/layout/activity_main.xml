@@ -6,20 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="205dp"
+        android:layout_height="57dp"
+        android:text="Welcome to APP!"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="103dp"
+        tools:layout_editor_absoluteY="343dp" />
 
-        <TableLayout
-            android:id="@+id/tableLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!-- Table rows and cells -->
-
-        </TableLayout>
-    </ScrollView>
-
-
-
+    <Button
+        android:id="@+id/enterButton"
+        android:layout_width="175dp"
+        android:layout_height="91dp"
+        android:text="Enter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.817"
+        tools:layout_editor_absoluteX="118dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

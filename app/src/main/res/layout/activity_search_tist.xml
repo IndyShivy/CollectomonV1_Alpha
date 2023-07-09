@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".SearchTist">
+
+        <ListView
+            android:id="@+id/artistWheel"
+            android:layout_width="339dp"
+            android:layout_height="275dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.266" />
+
+        <EditText
+            android:id="@+id/addArtist"
+            android:layout_width="232dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="544dp"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/addArtistButton"
+            android:layout_width="138dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="284dp"
+            android:text="Add Artist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.842"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistWheel" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="138dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="34dp"
+            android:text="Delete Artist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.131"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addArtist"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/continuButton"
+            android:layout_width="138dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="36dp"
+            android:text="Continue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistWheel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
