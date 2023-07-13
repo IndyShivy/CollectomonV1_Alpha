@@ -1,6 +1,8 @@
 package com.example.collectomon;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +11,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +30,11 @@ public class CardView extends AppCompatActivity {
     private CardAdapter cardAdapter;
     private List<CardItem> cardItems;
     private CardDatabase databaseHelper;
-    private Button myCards;
+    private Button addCards,myCards;
+    Toolbar toolbar;
+    CheckBox checkBox;
+    ArrayList<CardItem> selectedCardItemsList = new ArrayList<>();
+    String artistName;
 
 
     @Override
@@ -35,6 +43,10 @@ public class CardView extends AppCompatActivity {
         setContentView(R.layout.activity_card_view);
 
         Context context = CardView.this;
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Card List");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -42,9 +54,11 @@ public class CardView extends AppCompatActivity {
         cardAdapter = new CardAdapter(cardItems, context);
         recyclerView.setAdapter(cardAdapter);
         myCards = findViewById(R.id.myCardsButton);
+        addCards = findViewById(R.id.addCardsButton);
         databaseHelper = new CardDatabase(context);
         Intent intent = getIntent();
         String modifiedName = intent.getStringExtra("artist");
+        artistName = intent.getStringExtra("artistView");
         String theLink = "https://www.serebii.net/card/dex/artist/"+modifiedName+".shtml";
 
 
@@ -56,6 +70,15 @@ public class CardView extends AppCompatActivity {
                 //startActivity(intent);
             }
         });
+        addCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<CardItem> selectedCardItems = cardAdapter.getSelectedCardItems();
+                cardAdapter.notifyDataSetChanged();
+                databaseHelper.addCards(selectedCardItems);
+            }
+        });
+
 
 
         String finalTheLink = theLink;
@@ -84,8 +107,8 @@ public class CardView extends AppCompatActivity {
                             String setDetails = (setLink != null) ? setLink.text() : "";
 
                             String cardDetails = columnElements.get(2).ownText();
-                            String cardId = cardName + setDetails;
-                            CardItem cardItem = new CardItem(cardId, imageSrc1, cardName, setDetails, cardDetails);
+                            String cardId = cardName + setDetails + cardDetails;
+                            CardItem cardItem = new CardItem(artistName,cardId, imageSrc1, cardName, setDetails, cardDetails);
                             cardItems.add(cardItem);
                         }
                     }
@@ -105,6 +128,10 @@ public class CardView extends AppCompatActivity {
 
         webScrapingThread.start();
     }
+
+
+
+
 }
 
 

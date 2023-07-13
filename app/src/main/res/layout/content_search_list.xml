@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="50dp"
+    tools:context=".SearchTist">
+
+        <ListView
+            android:id="@+id/artistWheel"
+            android:layout_width="339dp"
+            android:layout_height="275dp"
+            android:layout_marginTop="112dp"
+            android:textColor="@color/list_item_text_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/addArtist"
+            android:layout_width="215dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="136dp"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.081"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistWheel" />
+
+        <Button
+            android:id="@+id/addArtistButton"
+            android:layout_width="138dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="124dp"
+            android:backgroundTint="#3F51B5"
+            android:text="Add Artist"
+            android:textColor="#D8D7D7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.901"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistWheel" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="138dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#A33434"
+            android:text="Delete Artist"
+            android:textColor="#D8D7D7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.087"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistWheel" />
+
+        <Button
+            android:id="@+id/continueButton"
+            android:layout_width="138dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#268C26"
+            android:text="Continue"
+            android:textColor="#D8D7D7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.901"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artistWheel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:context=".SearchTist">
+    android:background="#1C1C1C"
+    tools:context=".HomePage">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#1C1C1C">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarLayout"
@@ -30,7 +29,7 @@
                 app:layout_scrollFlags="scroll|enterAlways" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/content_search_list" />
+        <include layout="@layout/content_home_page" />
 
     </RelativeLayout>
 
@@ -50,3 +49,11 @@
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
+
+
+
+
+
+
+

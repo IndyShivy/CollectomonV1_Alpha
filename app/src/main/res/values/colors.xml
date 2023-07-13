@@ -3,4 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="status_bar_color">#231F1F</color>
+    <color name="navigation_background">#FF0000</color>
+    <color name="list_item_text_color">#FFFFFF</color>
 </resources>

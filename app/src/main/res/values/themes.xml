@@ -3,7 +3,40 @@
     <style name="Base.Theme.CollectoMon" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
 
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name = "android:buttonTint">@color/status_bar_color</item>
+        <item name="android:textColorPrimary">@color/list_item_text_color</item>
+
+
+    </style>
     <style name="Theme.CollectoMon" parent="Base.Theme.CollectoMon" />
+
+
+
+
+
 </resources>
+
+
+<!--
+ <item name="navigationViewStyle">@style/NavigationViewStyle</item>
+
+ <item name="colorButtonNormal">#673AB7</item>
+        <item name="android:textAppearanceMedium">@style/TextAppearance</item>
+        <item name="colorControlNormal">#878484</item>
+
+        <style name="NavigationViewStyle" parent="Widget.Design.NavigationView">
+        <item name="android:background">#2C2C2C</item>
+
+    </style>
+    <style name="TextAppearance">
+        <item name="android:textColor">#878484</item>
+        i<item name="android:textSize">19dp</item>
+    </style>
+        -->
+
+
+
+
+

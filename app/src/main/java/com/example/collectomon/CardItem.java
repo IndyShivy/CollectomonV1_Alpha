@@ -1,20 +1,23 @@
 package com.example.collectomon;
 
 public class CardItem {
+    private String artistName;
     private String cardID;
     private String imageSrc;
     private String cardName;
     private String setDetails;
     private String cardDetails;
-    private boolean selected;
+    private boolean isChecked;
 
-    public CardItem(String cardID,String imageSrc, String cardName, String setDetails, String cardDetails) {
+
+    public CardItem(String artistName,String cardID,String imageSrc, String cardName, String setDetails, String cardDetails) {
         this.imageSrc = imageSrc;
         this.cardName = cardName;
         this.setDetails = setDetails;
         this.cardDetails = cardDetails;
-        this.selected = false;
+        this.isChecked = false;
         this.cardID = cardID;
+        this.artistName = artistName;
     }
 
     public String getImageSrc() {
@@ -33,26 +36,30 @@ public class CardItem {
         return cardDetails;
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
     public boolean isChecked() {
-        return selected;
+        return isChecked;
     }
 
     public void setChecked(boolean checked) {
-        this.selected=true;
+        this.isChecked=checked;
     }
-
-    public void setId(long cardId) {
-    }
-
     public String getId() {
         return cardID;
+    }
+
+    public String toString(){
+        return cardID+" "+imageSrc+" "+cardName+" "+setDetails+" "+ cardDetails;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public String getCardId() {
+        return cardID;
+    }
+
+    public String getImageUrl() {
+        return imageSrc;
     }
 }
