@@ -9,15 +9,14 @@ public class CardItem {
     private String cardDetails;
     private boolean isChecked;
 
-
-    public CardItem(String artistName,String cardID,String imageSrc, String cardName, String setDetails, String cardDetails) {
+    public CardItem(String artistName, String cardID, String imageSrc, String cardName, String setDetails, String cardDetails) {
+        this.artistName = artistName;
+        this.cardID = cardID;
         this.imageSrc = imageSrc;
         this.cardName = cardName;
         this.setDetails = setDetails;
         this.cardDetails = cardDetails;
         this.isChecked = false;
-        this.cardID = cardID;
-        this.artistName = artistName;
     }
 
     public String getImageSrc() {
@@ -41,14 +40,16 @@ public class CardItem {
     }
 
     public void setChecked(boolean checked) {
-        this.isChecked=checked;
+        isChecked = checked;
     }
+
     public String getId() {
         return cardID;
     }
 
-    public String toString(){
-        return cardID+" "+imageSrc+" "+cardName+" "+setDetails+" "+ cardDetails;
+    @Override
+    public String toString() {
+        return cardID + " " + imageSrc + " " + cardName + " " + setDetails + " " + cardDetails;
     }
 
     public String getArtistName() {
@@ -62,5 +63,4 @@ public class CardItem {
     public String getImageUrl() {
         return imageSrc;
     }
-
 }

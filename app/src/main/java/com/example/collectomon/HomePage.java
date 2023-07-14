@@ -8,9 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -35,10 +33,9 @@ public class HomePage extends AppCompatActivity {
     private static final String PREFS_FILE_NAME = "MyPrefsFile";
     private static final String ARTIST_KEY = "artist";
     private SharedPreferences sharedPreferences;
-    Button backup,restore;
+    Button backup, restore;
     CardDatabase db;
     Context context;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +53,6 @@ public class HomePage extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(navListener);
-
-
-
 
         backup = findViewById(R.id.backupButton);
         restore = findViewById(R.id.restoreButton);
@@ -78,7 +72,7 @@ public class HomePage extends AppCompatActivity {
         backup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            db.saveBackup();
+                db.saveBackup();
             }
         });
         restore.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +89,8 @@ public class HomePage extends AppCompatActivity {
         editor.putStringSet(ARTIST_KEY, set);
         editor.apply();
     }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
@@ -108,19 +104,14 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(drawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
     private final NavigationView.OnNavigationItemSelectedListener navListener =
             new NavigationView.OnNavigationItemSelectedListener() {
                 @SuppressLint("NonConstantResourceId")
@@ -136,26 +127,38 @@ public class HomePage extends AppCompatActivity {
                         Intent artistSearch = new Intent(HomePage.this, SearchTist.class);
                         closeDrawer();
                         startActivity(artistSearch);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         return true;
                     }
                     if (id == R.id.my_collection) {
                         Intent myCollection = new Intent(HomePage.this, MyCollection.class);
                         closeDrawer();
                         startActivity(myCollection);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         return true;
                     }
+
                     return false;
                 }
             };
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-
+            // Exit the app
+            finishAffinity();
         }
     }
+
     private void closeDrawer() {
         drawerLayout.closeDrawer(navigationView);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.getMenu().findItem(R.id.my_collection).setChecked(false);
+    }
+
 }

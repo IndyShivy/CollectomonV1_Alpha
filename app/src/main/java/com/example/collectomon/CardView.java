@@ -1,7 +1,6 @@
 package com.example.collectomon;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import org.jsoup.Jsoup;
@@ -26,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CardView extends AppCompatActivity {
 
     private RecyclerView recyclerView;
@@ -35,8 +32,6 @@ public class CardView extends AppCompatActivity {
     private CardDatabase databaseHelper;
     private Button addCards,myCards;
     Toolbar toolbar;
-    CheckBox checkBox;
-    ArrayList<CardItem> selectedCardItemsList = new ArrayList<>();
     String artistName;
     private EditText searchEditText;
 
@@ -65,13 +60,19 @@ public class CardView extends AppCompatActivity {
         String modifiedName = intent.getStringExtra("artist");
         artistName = intent.getStringExtra("artistView");
         String theLink = "https://www.serebii.net/card/dex/artist/"+modifiedName+".shtml";
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         myCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CardView.this, MyCollection.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
         addCards.setOnClickListener(new View.OnClickListener() {
@@ -163,10 +164,18 @@ public class CardView extends AppCompatActivity {
 
         cardAdapter.filterList(filteredList);
     }
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
 
 }
+
+
+
+
 
 
 

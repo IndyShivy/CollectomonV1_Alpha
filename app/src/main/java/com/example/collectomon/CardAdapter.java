@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
@@ -26,6 +26,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     private boolean[] selectedPositions;
     ArrayList<CardItem> cardStuff;
     private CardDatabase cardDatabase;
+
     public CardAdapter(List<CardItem> cardItems, Context context) {
         this.cardItems = cardItems;
         this.context = context;
@@ -46,6 +47,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         cardDatabase = new CardDatabase(context);
         return new ViewHolder(view);
     }
+
     public void filterList(List<CardItem> filteredList) {
         cardItems = filteredList;
         notifyDataSetChanged();
@@ -54,7 +56,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CardItem cardItem = cardItems.get(position);
-        // Load image using Picasso
         Picasso.get()
                 .load(cardItem.getImageSrc())
                 .resize(600, 600)
@@ -64,46 +65,25 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         holder.cardNameTextView.setText(cardItem.getCardName());
         holder.setDetailsTextView.setText(cardItem.getSetDetails());
         holder.cardDetailsTextView.setText(cardItem.getCardDetails());
-        holder.checkbox.setOnCheckedChangeListener(null);// Clear any previous listener
-        holder.checkbox.setChecked(cardItem.isChecked()); // Clear any previous listener
-        // Set the initial checked state
-
-
+        holder.checkbox.setOnCheckedChangeListener(null);
+        holder.checkbox.setChecked(cardItem.isChecked());
 
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Update the isChecked value of the corresponding CardItem
                 cardItem.setChecked(isChecked);
 
-                // Add or remove the card details from the ArrayList based on the checkbox selection
                 if (isChecked) {
-                    // Add card details to the ArrayList
-                    // You can replace 'arrayList' with your desired ArrayList variable name
-
-
-
                 } else {
-                    // Remove card details from the ArrayList
-                    // You need to implement the removal logic based on your requirements
-
-
                 }
             }
         });
-
-
-
-
     }
-
-
 
     @Override
     public int getItemCount() {
         return cardItems.size();
     }
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
@@ -112,7 +92,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         TextView cardDetailsTextView;
         CheckBox checkbox;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
@@ -120,6 +99,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             setDetailsTextView = itemView.findViewById(R.id.setDetailsTextView);
             cardDetailsTextView = itemView.findViewById(R.id.cardDetailsTextView);
             checkbox = itemView.findViewById(R.id.checkbox);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    checkbox.setChecked(!checkbox.isChecked());
+                    // Handle checkbox state change as per your requirements
+                }
+            });
         }
     }
 
@@ -133,5 +119,4 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         }
         return selectedItems;
     }
-
 }
