@@ -9,11 +9,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -28,11 +32,12 @@ public class HomePage extends AppCompatActivity {
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
     private List<String> artistNames;
-
     private static final String PREFS_FILE_NAME = "MyPrefsFile";
     private static final String ARTIST_KEY = "artist";
     private SharedPreferences sharedPreferences;
-
+    Button backup,restore;
+    CardDatabase db;
+    Context context;
 
 
     @Override
@@ -54,6 +59,11 @@ public class HomePage extends AppCompatActivity {
 
 
 
+
+        backup = findViewById(R.id.backupButton);
+        restore = findViewById(R.id.restoreButton);
+        context = HomePage.this;
+        db = new CardDatabase(context);
         sharedPreferences = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
         artistNames = new ArrayList<>();
         artistNames.add("Yuka Morii");
@@ -64,6 +74,19 @@ public class HomePage extends AppCompatActivity {
             artistNames = new ArrayList<>(artistSet);
         }
         saveArtistList(artistNames);
+
+        backup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            db.saveBackup();
+            }
+        });
+        restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.restoreBackup();
+            }
+        });
     }
 
     private void saveArtistList(List<String> artistList) {
@@ -71,6 +94,18 @@ public class HomePage extends AppCompatActivity {
         Set<String> set = new HashSet<>(artistList);
         editor.putStringSet(ARTIST_KEY, set);
         editor.apply();
+    }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with the backup operation
+                db.saveBackup();
+            } else {
+                // Permission denied, handle the situation accordingly
+                // For example, display a message to the user or disable backup functionality
+            }
+        }
     }
 
 

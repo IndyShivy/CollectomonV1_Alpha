@@ -18,7 +18,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
+public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
 
     private List<CardItem> cardItems;
     private Context context;
@@ -26,12 +26,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     private boolean[] selectedPositions;
     ArrayList<CardItem> cardStuff;
     private CardDatabase cardDatabase;
-    public CardAdapter(List<CardItem> cardItems, Context context) {
+
+    public CollectionAdapter(List<CardItem> cardItems, Context context) {
         this.cardItems = cardItems;
         this.context = context;
     }
-
-    public CardAdapter(List<CardItem> cardItems, Context context, boolean[] selectedPositions) {
+    public CollectionAdapter(List<CardItem> cardItems, Context context, boolean[] selectedPositions) {
         this.cardItems = cardItems;
         this.context = context;
         this.selectedPositions = selectedPositions;
@@ -40,16 +40,42 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemrow, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.collectionrow, parent, false);
         databaseHelper = new CardDatabase(context);
         cardStuff = new ArrayList<>();
         cardDatabase = new CardDatabase(context);
         return new ViewHolder(view);
     }
-    public void filterList(List<CardItem> filteredList) {
-        cardItems = filteredList;
-        notifyDataSetChanged();
+
+    /*
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        CardItem cardItem = cardItems.get(position);
+        // Load image using Picasso
+        Picasso.get()
+                .load(cardItem.getImageSrc())
+                .resize(600, 600)
+                .centerInside()
+                .into(holder.imageView);
+
+        holder.cardNameTextView.setText(cardItem.getCardName());
+        holder.setDetailsTextView.setText(cardItem.getSetDetails());
+        holder.cardDetailsTextView.setText(cardItem.getCardDetails());
+        holder.checkbox.setOnCheckedChangeListener(null); // Clear any previous listener
+        holder.checkbox.setChecked(cardItem.isChecked()); // Set the initial checked state
+
+        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                cardItem.setChecked(isChecked); // Update the checked state of the card item
+
+                // Update the checked status in the database
+                databaseHelper.updateCardChecked(cardItem.getId(), isChecked);
+                System.out.println(cardItem.getCardDetails()+cardItem.getCardName());
+            }
+        });
     }
+     */
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -79,15 +105,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 // Add or remove the card details from the ArrayList based on the checkbox selection
                 if (isChecked) {
                     // Add card details to the ArrayList
-                    // You can replace 'arrayList' with your desired ArrayList variable name
-
-
-
+                    cardStuff.add(cardItem);
                 } else {
                     // Remove card details from the ArrayList
-                    // You need to implement the removal logic based on your requirements
-
-
+                    cardStuff.remove(cardItem);
                 }
             }
         });
@@ -124,14 +145,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public List<CardItem> getSelectedCardItems() {
-        List<CardItem> selectedItems = new ArrayList<>();
-        for (CardItem cardItem : cardItems) {
-            if (cardItem.isChecked()) {
-                selectedItems.add(cardItem);
-                cardItem.setChecked(false);
-            }
-        }
+        List<CardItem> selectedItems = new ArrayList<>(cardStuff);
+        cardStuff.clear(); // Clear the cardStuff ArrayList after retrieving the selected items
         return selectedItems;
     }
-
 }

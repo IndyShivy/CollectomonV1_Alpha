@@ -14,11 +14,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import com.google.android.material.navigation.NavigationView;
@@ -37,10 +45,14 @@ public class MyCollection extends AppCompatActivity {
     Toolbar toolbar;
     Context context;
     private RecyclerView recyclerView;
-    private CardAdapter cardAdapter;
+    private CollectionAdapter collectionAdapter;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ActionBarDrawerToggle drawerToggle;
+    Button deleteCards;
+    private Spinner spinnerArtists;
+    private CustomSpinnerAdapter spinnerAdapter;
+    private List<String> artistList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,14 +75,14 @@ public class MyCollection extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(navListener);
 
         recyclerView = findViewById(R.id.recyclerView);
-        cardAdapter = new CardAdapter(new ArrayList<>(), MyCollection.this);
+        collectionAdapter = new CollectionAdapter(new ArrayList<>(), MyCollection.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         listViewArtists = findViewById(R.id.listViewArtists);
         sharedPreferences = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
-
+        deleteCards = findViewById(R.id.deleteCardButton);
         // Retrieve the artist list from SharedPreferences
         Set<String> artistSet = sharedPreferences.getStringSet(ARTIST_KEY, null);
-        List<String> artistList = new ArrayList<>(artistSet);
+        artistList = new ArrayList<>(artistSet);
 
         // Create an ArrayAdapter to populate the ListView with the artist names
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, artistList);
@@ -88,12 +100,56 @@ public class MyCollection extends AppCompatActivity {
                 List<CardItem> cardItems = databaseHelper.getCardsByArtist(selectedArtist);
 
                 // Create a new CardAdapter with the retrieved card data
-                cardAdapter = new CardAdapter(cardItems, MyCollection.this);
+                collectionAdapter = new CollectionAdapter(cardItems, MyCollection.this);
 
                 // Set the CardAdapter as the adapter for the RecyclerView
-                recyclerView.setAdapter(cardAdapter);
+                recyclerView.setAdapter(collectionAdapter);
             }
         });
+
+        deleteCards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<CardItem> selectedCardItems = collectionAdapter.getSelectedCardItems();
+                databaseHelper.deleteCards(selectedCardItems);
+                List<CardItem> updated = databaseHelper.getallCards();
+                collectionAdapter = new CollectionAdapter(updated, MyCollection.this);
+                recyclerView.setAdapter(collectionAdapter);
+                collectionAdapter.notifyDataSetChanged();
+            }
+        });
+        spinnerArtists = findViewById(R.id.spinnerArtists);
+        artistList = new ArrayList<>(artistSet);
+        spinnerAdapter = new CustomSpinnerAdapter();
+        spinnerArtists.setAdapter(spinnerAdapter);
+
+
+// Set an item click listener to show the dropdown when the spinner is clicked
+        spinnerArtists.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    spinnerArtists.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+        spinnerArtists.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedArtist = artistList.get(position);
+                List<CardItem> cardItems = databaseHelper.getCardsByArtist(selectedArtist);
+                collectionAdapter = new CollectionAdapter(cardItems, MyCollection.this);
+                recyclerView.setAdapter(collectionAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when nothing is selected
+            }
+        });
+
     }
 
     @Override
@@ -141,6 +197,73 @@ public class MyCollection extends AppCompatActivity {
     }*/
     private void closeDrawer() {
         drawerLayout.closeDrawer(navigationView);
+    }
+    public class CustomSpinnerAdapter extends BaseAdapter {
+        private LayoutInflater inflater;
+
+        public CustomSpinnerAdapter() {
+            inflater = LayoutInflater.from(MyCollection.this);
+        }
+
+        @Override
+        public int getCount() {
+            return artistList.size();
+        }
+
+        @Override
+        public String getItem(int position) {
+            return artistList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.custom_spinner_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.artistName = convertView.findViewById(R.id.artistName);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            // Set data to the views
+            String artist = artistList.get(position);
+            viewHolder.artistName.setText(artist);
+
+            return convertView;
+        }
+
+
+        private class ViewHolder {
+            TextView artistName;
+        }
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
+
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.custom_spinner_item, parent, false);
+                viewHolder = new ViewHolder();
+                viewHolder.artistName = convertView.findViewById(R.id.artistName);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            // Set data to the views
+            String artist = artistList.get(position);
+            viewHolder.artistName.setText(artist);
+
+            return convertView;
+        }
+
     }
 
 }

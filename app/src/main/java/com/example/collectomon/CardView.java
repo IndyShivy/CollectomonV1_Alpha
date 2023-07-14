@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,6 +38,7 @@ public class CardView extends AppCompatActivity {
     CheckBox checkBox;
     ArrayList<CardItem> selectedCardItemsList = new ArrayList<>();
     String artistName;
+    private EditText searchEditText;
 
 
     @Override
@@ -47,7 +51,8 @@ public class CardView extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Card List");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.addTextChangedListener(textWatcher);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         cardItems = new ArrayList<>();
@@ -65,9 +70,8 @@ public class CardView extends AppCompatActivity {
         myCards.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create an intent to navigate to the other activity
-                //Intent intent = new Intent(MainActivity.this, MyCardsView.class);
-                //startActivity(intent);
+                Intent intent = new Intent(CardView.this, MyCollection.class);
+                startActivity(intent);
             }
         });
         addCards.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +111,7 @@ public class CardView extends AppCompatActivity {
                             String setDetails = (setLink != null) ? setLink.text() : "";
 
                             String cardDetails = columnElements.get(2).ownText();
-                            String cardId = cardName + setDetails + cardDetails;
+                            String cardId = artistName+cardName+setDetails+cardDetails;
                             CardItem cardItem = new CardItem(artistName,cardId, imageSrc1, cardName, setDetails, cardDetails);
                             cardItems.add(cardItem);
                         }
@@ -128,7 +132,37 @@ public class CardView extends AppCompatActivity {
 
         webScrapingThread.start();
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
 
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            filterCardItems(s.toString());
+        }
+
+    };
+    private void filterCardItems(String searchText) {
+        List<CardItem> filteredList = new ArrayList<>();
+
+        for (CardItem cardItem : cardItems) {
+            if (cardItem.getCardName().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredList.add(cardItem);
+            }
+        }
+
+        cardAdapter.filterList(filteredList);
+    }
 
 
 

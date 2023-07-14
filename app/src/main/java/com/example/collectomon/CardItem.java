@@ -62,4 +62,5 @@ public class CardItem {
     public String getImageUrl() {
         return imageSrc;
     }
+
 }
