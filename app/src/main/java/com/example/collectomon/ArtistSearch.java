@@ -1,6 +1,7 @@
 package com.example.collectomon;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,7 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SearchTist extends AppCompatActivity {
+public class ArtistSearch extends AppCompatActivity {
     private ListView listViewArtists;
     private List<String> artistNames;
     private ArrayAdapter<String> arrayAdapter;
@@ -42,12 +44,15 @@ public class SearchTist extends AppCompatActivity {
     private static final String ARTIST_KEY = "artist";
     private SharedPreferences sharedPreferences;
     private int checkedPosition = -1;
+    Spinner spinnerArtists;
+    CustomSpinnerAdapter spinnerAdapter;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_tist);
-
+        setContentView(R.layout.activity_artist_search);
+        context = ArtistSearch.this;
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Search Artist");
@@ -61,10 +66,10 @@ public class SearchTist extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(navListener);
 
-        addArtist = findViewById(R.id.addArtistButton);
-        deleteArtist = findViewById(R.id.deleteButton);
+        //addArtist = findViewById(R.id.addArtistButton);
+        //deleteArtist = findViewById(R.id.deleteButton);
         continueButton = findViewById(R.id.continueButton);
-        artistName = findViewById(R.id.addArtist);
+        //artistName = findViewById(R.id.addArtist);
         sharedPreferences = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
         artistNames = new ArrayList<>();
         Set<String> artistSet = sharedPreferences.getStringSet(ARTIST_KEY, null);
@@ -90,6 +95,19 @@ public class SearchTist extends AppCompatActivity {
             }
         });
 
+        listViewArtists.post(new Runnable() {
+            @Override
+            public void run() {
+                listViewArtists.setItemChecked(0, true);
+                checkedPosition = 0;
+            }
+        });
+        spinnerArtists = findViewById(R.id.spinnerArtists);
+        spinnerAdapter = new CustomSpinnerAdapter(context, artistNames);
+        spinnerArtists.setAdapter(spinnerAdapter);
+
+
+        /*
         deleteArtist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,10 +116,10 @@ public class SearchTist extends AppCompatActivity {
                     arrayAdapter.notifyDataSetChanged();
                     listViewArtists.setItemChecked(checkedPosition, false);
                     checkedPosition = -1;
-                    Toast.makeText(SearchTist.this, "Artist deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ArtistSearch.this, "Artist deleted", Toast.LENGTH_SHORT).show();
                     saveArtistList(artistNames);
                 } else {
-                    Toast.makeText(SearchTist.this, "No artist selection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ArtistSearch.this, "No artist selection", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -110,7 +128,7 @@ public class SearchTist extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (artistName.getText().toString().isEmpty()) {
-                    Toast.makeText(SearchTist.this, "No artist name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ArtistSearch.this, "No artist name", Toast.LENGTH_SHORT).show();
                 } else {
                     String name = artistName.getText().toString();
                     addArtistToList(name);
@@ -118,14 +136,17 @@ public class SearchTist extends AppCompatActivity {
             }
         });
 
+         */
+
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (checkedPosition != -1) {
                     String name = artistNames.get(checkedPosition);
+                    // String name = spinnerArtists.getSelectedItem().toString();
                     String stringWithoutGaps = name.replaceAll("\\s+", "");
                     String modifiedName = stringWithoutGaps.toLowerCase();
-                    Intent intent = new Intent(SearchTist.this, CardView.class);
+                    Intent intent = new Intent(ArtistSearch.this, CardView.class);
                     intent.putExtra("artistView", name);
                     intent.putExtra("artist", modifiedName);
                     startActivity(intent);
@@ -172,14 +193,14 @@ public class SearchTist extends AppCompatActivity {
                         }
                     }
                     if (id == R.id.home) {
-                        Intent artistSearch = new Intent(SearchTist.this, HomePage.class);
+                        Intent artistSearch = new Intent(ArtistSearch.this, HomePage.class);
                         closeDrawer();
                         startActivity(artistSearch);
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                         return true;
                     }
                     if (id == R.id.my_collection) {
-                        Intent myCollection = new Intent(SearchTist.this, MyCollection.class);
+                        Intent myCollection = new Intent(ArtistSearch.this, MyCollection.class);
                         closeDrawer();
                         startActivity(myCollection);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -195,7 +216,7 @@ public class SearchTist extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            Intent homeIntent = new Intent(SearchTist.this, HomePage.class);
+            Intent homeIntent = new Intent(ArtistSearch.this, HomePage.class);
             startActivity(homeIntent);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }

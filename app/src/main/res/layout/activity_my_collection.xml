@@ -20,13 +20,15 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#4163C6"
+                android:layout_width="60dp"
+                android:layout_height="64dp"
                 android:title="@string/app_name"
                 app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/toolbar_background"
                 app:layout_constraintTop_toTopOf="parent"
+                android:elevation="1dp"
                 app:layout_scrollFlags="scroll|enterAlways" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <include layout="@layout/content_my_collection" />

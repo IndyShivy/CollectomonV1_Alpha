@@ -23,7 +23,7 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
-            android:name=".SearchTist"
+            android:name=".ArtistSearch"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity

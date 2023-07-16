@@ -14,12 +14,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -47,6 +50,8 @@ public class MyCollection extends AppCompatActivity {
     private List<String> artistList;
     private Toolbar toolbar;
     private ListView listViewArtists;
+    private EditText searchEditText;
+    private List<CardItem> cardItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,7 @@ public class MyCollection extends AppCompatActivity {
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(navListener);
-
+        cardItems = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
         collectionAdapter = new CollectionAdapter(new ArrayList<>(), MyCollection.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -79,6 +84,8 @@ public class MyCollection extends AppCompatActivity {
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, artistList);
         listViewArtists.setAdapter(arrayAdapter);
+        searchEditText = findViewById(R.id.searchEditText1);
+        searchEditText.addTextChangedListener(textWatcher);
 
         listViewArtists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -161,7 +168,7 @@ public class MyCollection extends AppCompatActivity {
                         return true;
                     }
                     if (id == R.id.search_artists) {
-                        Intent myCollection = new Intent(MyCollection.this, SearchTist.class);
+                        Intent myCollection = new Intent(MyCollection.this, ArtistSearch.class);
                         closeDrawer();
                         startActivity(myCollection);
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -185,4 +192,32 @@ public class MyCollection extends AppCompatActivity {
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
     }
+
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            filterCardItems(s.toString());
+        }
+
+        private void filterCardItems(String searchText) {
+            List<CardItem> filteredList = new ArrayList<>();
+
+            for (CardItem cardItem : databaseHelper.getAllCards()) {
+                if (cardItem.getCardName().toLowerCase().startsWith(searchText.toLowerCase())) {
+                    filteredList.add(cardItem);
+                }
+            }
+
+            collectionAdapter.filterList(filteredList);  // Use the adapter's filterList method to update the RecyclerView
+        }
+    };
+
 }

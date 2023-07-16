@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:context=".SearchTist">
+    tools:context=".ArtistSearch">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,16 +21,16 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#4163C6"
+                android:layout_width="60dp"
+                android:layout_height="64dp"
+                android:background="@drawable/toolbar_background"
                 android:title="@string/app_name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_scrollFlags="scroll|enterAlways" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/content_search_list" />
+        <include layout="@layout/content_artist_search" />
 
     </RelativeLayout>
 

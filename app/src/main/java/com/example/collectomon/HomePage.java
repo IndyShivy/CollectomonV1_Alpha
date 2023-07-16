@@ -15,7 +15,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -34,8 +40,13 @@ public class HomePage extends AppCompatActivity {
     private static final String ARTIST_KEY = "artist";
     private SharedPreferences sharedPreferences;
     Button backup, restore;
+    ImageButton addArtistButton,deleteArtistButton;
     CardDatabase db;
     Context context;
+    private ListView listViewArtists;
+    private ArrayAdapter<String> arrayAdapter;
+    private int checkedPosition = -1;
+    EditText addArtist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +57,15 @@ public class HomePage extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Home");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        addArtistButton = findViewById(R.id.addArtistButton);
+        deleteArtistButton = findViewById(R.id.deleteArtistButton);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(navListener);
-
+        addArtist = findViewById(R.id.searchCard);
         backup = findViewById(R.id.backupButton);
         restore = findViewById(R.id.restoreButton);
         context = HomePage.this;
@@ -69,6 +81,18 @@ public class HomePage extends AppCompatActivity {
         }
         saveArtistList(artistNames);
 
+        listViewArtists = findViewById(R.id.listViewArtists);  // Find the ListView
+        arrayAdapter = new ArrayAdapter<>(this, R.layout.list_item_artist, artistNames);
+        listViewArtists.setAdapter(arrayAdapter);
+        listViewArtists.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listViewArtists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                checkedPosition = position;
+            }
+        });
+
+
         backup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,14 +105,35 @@ public class HomePage extends AppCompatActivity {
                 db.restoreBackup();
             }
         });
+        deleteArtistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkedPosition != -1) {
+                    artistNames.remove(checkedPosition);
+                    arrayAdapter.notifyDataSetChanged();
+                    listViewArtists.setItemChecked(checkedPosition, false);
+                    checkedPosition = -1;
+                    Toast.makeText(HomePage.this, "Artist deleted", Toast.LENGTH_SHORT).show();
+                    saveArtistList(artistNames);
+                } else {
+                    Toast.makeText(HomePage.this, "No artist selection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        addArtistButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (addArtist.getText().toString().isEmpty()) {
+                    Toast.makeText(HomePage.this, "No artist name", Toast.LENGTH_SHORT).show();
+                } else {
+                    String name = addArtist.getText().toString();
+                    addArtistToList(name);
+                }
+            }
+        });
     }
 
-    private void saveArtistList(List<String> artistList) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Set<String> set = new HashSet<>(artistList);
-        editor.putStringSet(ARTIST_KEY, set);
-        editor.apply();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -124,7 +169,7 @@ public class HomePage extends AppCompatActivity {
                         }
                     }
                     if (id == R.id.search_artists) {
-                        Intent artistSearch = new Intent(HomePage.this, SearchTist.class);
+                        Intent artistSearch = new Intent(HomePage.this, ArtistSearch.class);
                         closeDrawer();
                         startActivity(artistSearch);
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -147,7 +192,7 @@ public class HomePage extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            // Exit the app
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finishAffinity();
         }
     }
@@ -160,5 +205,19 @@ public class HomePage extends AppCompatActivity {
         super.onResume();
         navigationView.getMenu().findItem(R.id.my_collection).setChecked(false);
     }
+    public void addArtistToList(String name) {
+        artistNames.add(name);
+        arrayAdapter.notifyDataSetChanged();
+        addArtist.setText("");
+        listViewArtists.setItemChecked(artistNames.size() - 1, true);
+        checkedPosition = artistNames.size() - 1;
+        saveArtistList(artistNames);
+    }
 
+    private void saveArtistList(List<String> artistList) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Set<String> set = new HashSet<>(artistList);
+        editor.putStringSet(ARTIST_KEY, set);
+        editor.apply();
+    }
 }

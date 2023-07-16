@@ -106,4 +106,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
         cardStuff.clear(); // Clear the cardStuff ArrayList after retrieving the selected items
         return selectedItems;
     }
+
+    public void filterList(List<CardItem> filteredList) {
+        cardItems = filteredList;
+        notifyDataSetChanged();
+    }
 }

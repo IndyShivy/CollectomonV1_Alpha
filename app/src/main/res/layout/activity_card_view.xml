@@ -7,40 +7,33 @@
     android:background="#1C1C1C"
     tools:context=".CardView">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="96dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="16dp"
-        android:text="Search:"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="#F1E6E6"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="9dp"
+        app:layout_constraintEnd_toStartOf="@+id/searchEditText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/searchicon" />
 
     <EditText
         android:id="@+id/searchEditText"
-        android:layout_width="281dp"
+        android:layout_width="284dp"
         android:layout_height="44dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="84dp"
         android:ems="10"
         android:hint="Type a pokemon name"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.876"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#4163C6"
+        android:background="#6B1522"
         android:title="@string/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -50,33 +43,23 @@
         android:id="@+id/myCardsButton"
         android:layout_width="135dp"
         android:layout_height="65dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="95dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="48dp"
         android:backgroundTint="#3F51B5"
         android:text="MyCards"
         android:textColor="#D8D7D7"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addCardsButton"
-        app:layout_constraintTop_toBottomOf="@+id/searchEditText"
-        app:layout_constraintVertical_bias="0.978" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     <Button
         android:id="@+id/addCardsButton"
         android:layout_width="135dp"
         android:layout_height="65dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#268C26"
         android:text="Add Cards"
         android:textColor="#D8D7D7"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/myCardsButton"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
@@ -85,10 +68,9 @@
         android:layout_width="398dp"
         android:layout_height="550dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
 

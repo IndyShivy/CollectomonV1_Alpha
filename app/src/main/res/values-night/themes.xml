@@ -3,13 +3,23 @@
     <style name="Base.Theme.CollectoMon" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="android:statusBarColor">@color/status_bar_color</item>
-        <item name="colorButtonNormal">#66B73A</item>
+
 
     </style>
 
     <style name="Theme.CollectoMon" parent="Base.Theme.CollectoMon" />
 
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorSecondary">#45494A</item>
+    </style>
 </resources>
+
+    <!-- <item name = "android:buttonTint">@color/status_bar_color</item>
+            <item name="android:textColorPrimary">@color/list_item_text_color</item> -->
+
+
+
 
 <!--
  <item name="android:textAppearanceMedium">@style/TextAppearance</item>

@@ -187,7 +187,7 @@ public class CardDatabase extends SQLiteOpenHelper {
         for (CardItem card : cards) {
             if (!isCardIdExists(db, card.getCardId())) {
                 ContentValues values = new ContentValues();
-                values.put(ARTIST_NAME, card.getArtistName()); // Add artist name to the ContentValues
+                values.put(ARTIST_NAME, card.getArtistName());
                 values.put(CARD_ID, card.getCardId());
                 values.put(COLUMN_IMAGE_SRC, card.getImageUrl());
                 values.put(COLUMN_CARD_NAME, card.getCardName());
@@ -237,11 +237,9 @@ public class CardDatabase extends SQLiteOpenHelper {
         return exists;
     }
 
-    public List<CardItem> getallCards() {
+    public List<CardItem> getAllCards() {
 
         List<CardItem> list = new ArrayList<CardItem>();
-
-        // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_NAME;
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -265,5 +263,84 @@ public class CardDatabase extends SQLiteOpenHelper {
 
         return list;
     }
+    public boolean isCardExists(String cardId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] columns = {CARD_ID};
+        String selection = CARD_ID + " = ?";
+        String[] selectionArgs = {cardId};
+        String limit = "1";
+
+        Cursor cursor = db.query(TABLE_NAME, columns, selection, selectionArgs, null, null, null, limit);
+        boolean exists = (cursor != null && cursor.getCount() > 0);
+        cursor.close();
+        db.close();
+
+        return exists;
+    }
+    /*
+    public void addCard(CardItem cardItem) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(CARD_ID, cardItem.getCardId());
+
+        db.insert(TABLE_NAME, null, values);
+        db.close();
+    }
+
+     */
+    public void addCard(CardItem cardItem) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        if (!isCardIdExists(db, cardItem.getCardId())) {
+            ContentValues values = new ContentValues();
+            values.put(ARTIST_NAME, cardItem.getArtistName()); // Add artist name to the ContentValues
+            values.put(CARD_ID, cardItem.getCardId());
+            values.put(COLUMN_IMAGE_SRC, cardItem.getImageUrl());
+            values.put(COLUMN_CARD_NAME, cardItem.getCardName());
+            values.put(COLUMN_SET_DETAILS, cardItem.getSetDetails());
+            values.put(COLUMN_CARD_DETAILS, cardItem.getCardDetails());
+
+            db.insert(TABLE_NAME, null, values);
+            Log.d("CardDatabase", "Added Card: Name" + cardItem.getArtistName() + "ID:" + cardItem.getCardId() + "IAMGE" + cardItem.getImageUrl() + cardItem.getCardName() + cardItem.getCardDetails() + cardItem.getSetDetails());
+        } else {
+            Log.d("CardDatabase", "Skipped Card: ID " + cardItem.getCardId() + " already exists in the database.");
+        }
+        db.close();
+    }
+
+    public void deleteCard(CardItem cardItem) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String cardId = cardItem.getCardId();
+
+        if (isCardIdExists(db, cardId)) {
+            db.delete(TABLE_NAME, CARD_ID + " = ?", new String[]{cardId});
+            Log.d("CardDatabase", "Deleted Card: ID " + cardItem.getCardId());
+        } else {
+            Log.d("CardDatabase", "Card: ID " + cardItem.getCardId() + " does not exist in the database.");
+        }
+        db.close();
+        }
+
+
+
+
+
+    public void updateCard(CardItem cardItem) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(ARTIST_NAME, cardItem.getArtistName());
+        values.put(CARD_ID, cardItem.getCardId());
+        values.put(COLUMN_IMAGE_SRC, cardItem.getImageSrc());
+        values.put(COLUMN_CARD_NAME, cardItem.getCardName());
+        values.put(COLUMN_SET_DETAILS, cardItem.getSetDetails());
+        values.put(COLUMN_CARD_DETAILS, cardItem.getCardDetails());
+
+        db.update(TABLE_NAME, values, CARD_ID + " = ?", new String[]{cardItem.getCardId()});
+        db.close();
+    }
+
 }
 
